@@ -58,6 +58,7 @@ class UserService {
     const meta = {
       page: parseInt(page, 10),
       totalPages,
+      total: totalRecords,
     };
 
     return { data: users, meta: meta };

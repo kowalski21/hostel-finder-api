@@ -23,6 +23,7 @@ router.get(
     const meta = {
       page: parseInt(page, 10),
       totalPages,
+      total: totalRecords,
     };
 
     return res.json({ data: hostels, meta: meta });
