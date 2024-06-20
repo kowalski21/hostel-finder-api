@@ -47,6 +47,12 @@ class UserService {
       where: filterQuery,
       skip: (page - 1) * pageSize,
       take: pageSize,
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        role: true,
+      },
     });
 
     const meta = {
@@ -75,12 +81,26 @@ class UserService {
     }
   }
 
-  async readOne(pk, payload) {
+  async updateOne(pk, payload) {
     const user = await this.prisma.user.update({
       where: {
         id: pk,
       },
       data: payload,
+    });
+
+    const _user = _.omit(user, ["password"]);
+    return _user;
+  }
+
+  async readOne(pk) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: pk,
+      },
+      include: {
+        role: true,
+      },
     });
 
     const _user = _.omit(user, ["password"]);

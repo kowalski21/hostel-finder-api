@@ -45,6 +45,8 @@ const errorHandler = (err, req, res, next) => {
     }
   }
 
+  // console.log(payload);
+
   return res.json(payload);
 };
 

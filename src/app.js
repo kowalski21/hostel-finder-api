@@ -21,11 +21,14 @@ const roleRouter = require("./controllers/role");
 const assetRouter = require("./controllers/asset");
 const hostelRouter = require("./controllers/hostel");
 const roomsRouter = require("./controllers/room");
+const roomRequestRouter = require("./controllers/room_request");
 const { authenticateHandler } = require("./middleware/authenticate");
 const { isLoggedIn } = require("./middleware/perms");
+const { fixQuery } = require("./utils/query");
 
 dotenv.config();
-
+const folderPath = path.join(__dirname, "..", "uploads");
+console.log(folderPath);
 const createApp = async () => {
   //  validate secret
   //  validate database connection
@@ -38,9 +41,17 @@ const createApp = async () => {
   app.disabled("x-powered-by");
   app.set("trust proxy", true);
   app.use("query parser", (str) => qs.parse(str, { depth: 10 }));
+  app.set("x-powered-by", "Devops Champs");
 
-  app.use(express.static(path.join(__dirname, "uploads")));
+  // console.log(folderPath);
 
+  // app.use("/uploads", express.static(folderPath));
+  app.use((req, res, next) => {
+    let query = req.query;
+    req.query = fixQuery(query);
+    // console.log(req.query);
+    return next();
+  });
   app.use((req, res, next) => {
     express.json()(req, res, (err) => {
       if (err) {
@@ -70,6 +81,7 @@ const createApp = async () => {
   app.use("/api/assets", assetRouter);
   app.use("/api/hostels", isLoggedIn, hostelRouter);
   app.use("/api/rooms", isLoggedIn, roomsRouter);
+  app.use("/api/room_request", isLoggedIn, roomRequestRouter);
   app.use(notFound);
   app.use(errorHandler);
 

@@ -37,7 +37,9 @@ model User {
   status          String          @default("active")
   hostelsOwned    Hostel[]        @relation("OwnedHostels")
   hostelsAuthored Hostel[]        @relation("AuthoredHostels")
-  RoomOccupancy   RoomOccupancy[]
+  rooms   RoomOccupancy[]
+  room_request  RoomRequest[]
+  payment  Payment[]
 }
 
 model Hostel {
@@ -47,7 +49,7 @@ model Hostel {
   lng       Float?
   city      String
   town      String
-  image String?
+  image     String?
   no_rooms  Int
   images    String[]
   createdAt DateTime @default(now())
@@ -57,35 +59,68 @@ model Hostel {
   authorId  Int
   author    User     @relation("AuthoredHostels", fields: [authorId], references: [id])
   rooms     Room[]
+
+  room_request RoomRequest[]
 }
 
 model Room {
-  id              Int             @id @default(autoincrement())
-  name            String
-  numOccupants    Int
-  description     String?
-  available    Boolean   @default(true)
-  unitCost  Float
-  hostelId        Int
-  hostel          Hostel          @relation(fields: [hostelId], references: [id])
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
-  occupants       RoomOccupancy[]
+  id           Int             @id @default(autoincrement())
+  name         String
+  numOccupants Int
+  description  String?
+  available    Boolean         @default(true)
+  unitCost     Float
+  hostelId     Int
+  hostel       Hostel          @relation(fields: [hostelId], references: [id])
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  occupants    RoomOccupancy[]
+  room_request  RoomRequest[]
 }
 
 model RoomOccupancy {
   id        Int       @id @default(autoincrement())
   userId    Int
   roomId    Int
-  startDate DateTime
+  startDate DateTime  @db.Date()
   endDate   DateTime?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   status    String    @default("active")
   amount    Decimal   @db.Decimal(10, 2)
-  year      DateTime
-  user User @relation(fields: [userId], references: [id])
-  room Room @relation(fields: [roomId], references: [id])
+  year      String
+  user      User      @relation(fields: [userId], references: [id])
+  room      Room      @relation(fields: [roomId], references: [id])
 
-  @@unique([userId, roomId, startDate])
+  @@unique([userId, roomId,status])
+}
+
+model RoomRequest {
+  id       Int    @id @default(autoincrement())
+  hostelId Int
+  hostel   Hostel @relation(fields: [hostelId], references: [id])
+  roomId  Int
+  room  Room  @relation(fields: [roomId],references: [id])
+  amount Decimal @db.Decimal(10,2)
+  year String
+  customerId Int
+  customer  User @relation(fields: [customerId],references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  status    String   @default("active")
+  notes    String?
+  @@unique([customerId, roomId,status])
+}
+
+
+model Payment{
+  id       Int    @id @default(autoincrement())
+  amount Decimal @db.Decimal(10,2)
+  payment_type String @default("momo")
+  meta  Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  status    String   @default("active")
+  customerId Int
+  customer User @relation(fields: [customerId],references: [id])
 }

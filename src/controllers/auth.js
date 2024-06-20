@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const joi = require("joi");
+const _ = require("lodash");
 const asyncHandler = require("../utils/async-handler");
 const InvalidPayloadException = require("../exceptions/invalid-payload");
 const AuthenticationService = require("../services/authorization");
@@ -33,9 +34,20 @@ router.get(
   "/me",
   isLoggedIn,
   asyncHandler(async (req, res) => {
+    const service = new AuthenticationService();
     const _user = req.user;
+    const user = await service.prisma.user.findUnique({
+      where: {
+        id: _user.id,
+      },
+      include: {
+        role: true,
+      },
+    });
 
-    return res.json(_user);
+    const omit_ = _.omit(user, ["password"]);
+
+    return res.json({ data: omit_, meta: [] });
   })
 );
 

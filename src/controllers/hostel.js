@@ -40,7 +40,7 @@ router.post(
     const hostel = await prisma.hostel.create({
       data: payload,
     });
-    return res.json({ message: "hostel created", hostel });
+    return res.json({ data: hostel, meta: {} });
   })
 );
 
@@ -59,7 +59,7 @@ router.get(
       sendError("Hostel not found", 404, errorCodes.NOT_FOUND);
     }
 
-    return res.json(hostel);
+    return res.json({ data: hostel, meta: {} });
   })
 );
 
@@ -74,16 +74,23 @@ router.get(
         hostelId: pk,
       },
     });
-    return res.json({ message: "Hostel details", rooms });
+    return res.json({ data: rooms, meta: {} });
   })
 );
 
 router.patch(
   "/:hostelId",
   asyncHandler(async (req, res) => {
+    const payload = req.body;
     const { hostelId } = req.params;
+    const record = await prisma.hostel.update({
+      where: {
+        id: parseInt(hostelId),
+      },
+      data: payload,
+    });
 
-    return res.json({ message: "Hostel details" });
+    return res.json({ data: record, meta: {} });
   })
 );
 
