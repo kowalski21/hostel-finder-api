@@ -51,6 +51,7 @@ model Hostel {
   town      String
   image     String?
   no_rooms  Int
+  avail_rooms Int  @default(5)
   images    String[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -67,6 +68,7 @@ model Room {
   id           Int             @id @default(autoincrement())
   name         String
   numOccupants Int
+  tenant       Int @default(0)
   description  String?
   available    Boolean         @default(true)
   unitCost     Float

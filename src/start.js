@@ -18,6 +18,14 @@ const startServer = async () => {
     });
 };
 
-startServer().catch((err) => {
-  console.log(err);
-});
+// startServer().catch((err) => {
+//   console.log(err);
+// });
+
+startServer()
+  .then(() => {
+    console.log(`Server is running`);
+  })
+  .catch((err) => {
+    console.log(err);
+  });

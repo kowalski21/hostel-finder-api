@@ -7,7 +7,7 @@ router.get(
   "/",
   asyncHandler(async (req, res) => {
     // console.log(req.query);
-    const pageSize = 2;
+    const pageSize = 100;
     const filter = req.query.filter || {};
     const page = req.query.page || 1;
 
@@ -73,6 +73,9 @@ router.get(
     const rooms = await prisma.room.findMany({
       where: {
         hostelId: pk,
+      },
+      orderBy: {
+        name: "asc",
       },
     });
     return res.json({ data: rooms, meta: {} });

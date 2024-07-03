@@ -4,6 +4,7 @@ const multer = require("multer");
 const asyncHandler = require("../utils/async-handler");
 const fs = require("fs");
 const { sendError, errorCodes } = require("../utils/utils-error");
+const { isLoggedIn } = require("../middleware/perms");
 // const storage = require("../storage");
 
 // const upload = multer({ dest: "./uploads" });
@@ -37,7 +38,7 @@ router.post(
       //   fs.unlinkSync(file.path);
       // return res.json({ message: "File uploaded", url: file.filename });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       sendError("File Upload Failed..", 500, errorCodes.PAYLOAD);
     }
   })

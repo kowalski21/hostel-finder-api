@@ -14,6 +14,7 @@ router.post(
   "/login",
 
   asyncHandler(async (req, res, next) => {
+    // throw new Error("oops");
     const service = new AuthenticationService();
     const accountability = {
       ip: req.ip,

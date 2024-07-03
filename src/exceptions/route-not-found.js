@@ -2,7 +2,7 @@ const BaseException = require("./base");
 
 class RouteNotFoundException extends BaseException {
   constructor(path) {
-    super(`Route ${path} does not exist`, 404, `ROUTE_NOT_FOUND`);
+    super(`Error Route ${path} does not exist`, 404, `ROUTE_NOT_FOUND`);
   }
 }
 
