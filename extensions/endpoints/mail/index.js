@@ -7,12 +7,17 @@ const register = (router, { services, exceptions, database, getSchema }) => {
   router.get(`/new`, async (req, res, next) => {
     const schema = await getSchema();
     const mailService = new MailService({ schema });
-    await mailService.send({
-      to: "douglasbiomed3@gmail.com",
-      from: "noreply@directus.io",
-      subject: "Testiing Email",
-      text: `Hope it works`,
-    });
+    try {
+      await mailService.send({
+        to: "douglasbiomed3@gmail.com",
+        from: "devopsdavion@gmail.com",
+        subject: "Testiing Email",
+        text: `Hope it works`,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
     return res.json({ message: "mail sent" });
   });
 };
