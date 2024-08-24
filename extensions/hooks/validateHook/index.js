@@ -39,19 +39,19 @@ const registerHook = ({ init, filter, action }, hookCtx) => {
     // throw new Error("oops");
   });
 
-  // action("payment.items.create", async ({ payload }, { database: knex }) => {
-  //   // console.log(Object.keys(ctx));
-  //   knex("room")
-  //     .where("id", payload.room)
-  //     .increment("tenant_no", 1)
-  //     .then(() => {
-  //       console.log("Increment has been done");
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  //   // console.log(payload);
-  // });
+  action("payment.items.create", async ({ payload }, { database: knex }) => {
+    // console.log(Object.keys(ctx));
+    knex("room")
+      .where("id", payload.room)
+      .increment("tenant_no", 1)
+      .then(() => {
+        console.log("Increment has been done");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    // console.log(payload);
+  });
 };
 
 module.exports = registerHook;
