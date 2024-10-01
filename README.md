@@ -6,3 +6,4 @@ Click on the link to install it https://www.postgresql.org/download/windows/
 4. when you done installing all the packages,
 run `npx prisma db push` to sync the schema to the database
 hope this runs 
+I'm testing pull request
